@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>kovs.vault — a kuromi-coded notebook</title>
+  <meta name="description" content="A personal Notion/Obsidian-style space. Kuromi-themed, violet & pink, light/dark." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%92%9C%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- decorative bg -->
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+    <span class="grain"></span>
+  </div>
+  <div id="trail-root" aria-hidden="true"></div>
+
+  <div class="app">
+    <!-- ░░░ SIDEBAR ░░░ -->
+    <aside class="sidebar" id="sidebar">
+      <div class="workspace">
+        <button class="workspace-pill" aria-label="Workspace">
+          <span class="ws-emoji" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="22" height="22">
+              <defs>
+                <linearGradient id="bowg" x1="0" x2="1">
+                  <stop offset="0" stop-color="#ff7ad9"/><stop offset="1" stop-color="#a87bff"/>
+                </linearGradient>
+              </defs>
+              <ellipse cx="16" cy="17" rx="10" ry="9" fill="#1a1326" stroke="url(#bowg)" stroke-width="1.4"/>
+              <circle cx="12" cy="16" r="1.8" fill="#ff7ad9"/>
+              <circle cx="20" cy="16" r="1.8" fill="#ff7ad9"/>
+              <path d="M13 21 Q16 23 19 21" stroke="#ff7ad9" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <path d="M6 8 L11 11 L8 14 Z" fill="url(#bowg)"/>
+              <path d="M26 8 L21 11 L24 14 Z" fill="url(#bowg)"/>
+            </svg>
+          </span>
+          <span class="ws-name">kovs.vault</span>
+          <kbd class="ws-kbd">⌘K</kbd>
+        </button>
+
+        <label class="search">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <input id="search" type="search" placeholder="Quick find…" />
+          <kbd>/</kbd>
+        </label>
+      </div>
+
+      <nav class="nav">
+        <!-- portrait + quote, like the reference -->
+        <div class="sb-portrait">
+          <div class="img-slot ratio-portrait"
+               data-slot="portrait"
+               data-dark="assets/portrait-dark.png"
+               data-light="assets/portrait-light.png">
+            <span class="slot-label">portrait · 1:1</span>
+          </div>
+          <p class="quote">"turning dreams into plans, and plans into sparkly little realities."</p>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-heading">Navigation</div>
+          <ul class="tree">
+            <li><a class="page-link active" href="#/" data-route="/"><span class="ico">🏠</span> home</a></li>
+            <li><a class="page-link" href="#/about" data-route="/about"><span class="ico">🎀</span> about me</a></li>
+            <li>
+              <details open>
+                <summary class="page-link"><span class="ico">🌸</span> hobbies</summary>
+                <ul class="tree nested">
+                  <li><a class="page-link" href="#/hobby/default" data-route="/hobby/default"><span class="ico">✦</span> default hobby</a></li>
+                </ul>
+              </details>
+            </li>
+            <li><a class="page-link" href="#/notes" data-route="/notes"><span class="ico">🗒️</span> notes</a></li>
+            <li><a class="page-link" href="#/links" data-route="/links"><span class="ico">🔗</span> links</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-heading">Tags</div>
+          <div class="tag-row">
+            <span class="tag">#cute</span><span class="tag">#dev</span><span class="tag">#late-night</span><span class="tag">#ideas</span>
+          </div>
+        </div>
+
+        <div class="nav-section trash">
+          <a class="page-link muted" href="#"><span class="ico">🗑️</span> trash</a>
+          <a class="page-link muted" href="#"><span class="ico">⚙️</span> settings</a>
+        </div>
+      </nav>
+
+      <div class="sb-footer">
+        <div class="avatar"><span>K</span></div>
+        <div class="who">
+          <div class="who-name">kovs</div>
+          <div class="who-status"><i class="dot"></i> online · vibing</div>
+        </div>
+        <button class="icon-btn theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+          <svg class="i-moon" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="i-sun" viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></g></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ░░░ MAIN ░░░ -->
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn" id="sbToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M4 5h16v2H4zM4 11h10v2H4zM4 17h16v2H4z"/></svg>
+        </button>
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="#/">kovs.vault</a>
+          <span class="sep">/</span>
+          <span class="here" id="crumbHere">home</span>
+        </nav>
+        <div class="top-actions">
+          <button class="chip"><span>★</span> favorite</button>
+          <button class="chip"><span>↗</span> share</button>
+          <button class="chip"><span>···</span></button>
+        </div>
+      </header>
+
+      <!-- COVER (full-width of main, image slot, dark/light variants) -->
+      <div class="cover">
+        <div class="img-slot cover-img"
+             data-slot="cover"
+             data-dark="assets/cover-dark.png"
+             data-light="assets/cover-light.png">
+          <span class="slot-label">cover · 16:5</span>
+        </div>
+      </div>
+
+      <article class="page" id="page">
+        <div class="page-emoji" title="page icon">💜</div>
+
+        <!-- views switch -->
+        <div class="view" data-view="/" hidden></div>
+        <div class="view" data-view="/about" hidden></div>
+        <div class="view" data-view="/hobby/default" hidden></div>
+        <div class="view" data-view="/notes" hidden></div>
+        <div class="view" data-view="/links" hidden></div>
+
+        <!-- ====== HOME ====== -->
+        <template id="tpl-/">
+          <h1 class="page-title" contenteditable="true" spellcheck="false">⊙ <span class="grad">kovs</span> dashboard ⊙</h1>
+          <p class="page-sub">a tiny corner of the internet · pastel-goth, half notebook half mood board</p>
+
+          <div class="callout c-purple">
+            <span class="callout-emoji">🎀</span>
+            <div>
+              <strong>welcome to the vault.</strong> "small steps each day turn into big, beautiful changes."
+              press <kbd>T</kbd> to flip the theme · <kbd>/</kbd> to search · <kbd>⌘K</kbd> to jump.
+            </div>
+          </div>
+
+          <!-- NOTEBOOKS GRID -->
+          <div class="section-head">
+            <h2>📓 notebooks</h2>
+            <div class="section-actions">
+              <button class="chip">⏚ filter</button>
+              <button class="chip">↕ sort</button>
+              <button class="chip">🔍</button>
+            </div>
+          </div>
+
+          <div class="notebooks">
+            <a class="notebook" href="#/notes">
+              <div class="img-slot ratio-43"
+                   data-slot="notebook-1"
+                   data-dark="assets/nb1-dark.png"
+                   data-light="assets/nb1-light.png">
+                <span class="slot-label">notebook 1</span>
+              </div>
+              <div class="nb-foot"><span class="nb-ico">📄</span><span>Notebook 1</span></div>
+            </a>
+            <a class="notebook" href="#/notes">
+              <div class="img-slot ratio-43"
+                   data-slot="notebook-2"
+                   data-dark="assets/nb2-dark.png"
+                   data-light="assets/nb2-light.png">
+                <span class="slot-label">notebook 2</span>
+              </div>
+              <div class="nb-foot"><span class="nb-ico">📄</span><span>Notebook 2</span></div>
+            </a>
+            <a class="notebook" href="#/notes">
+              <div class="img-slot ratio-43"
+                   data-slot="notebook-3"
+                   data-dark="assets/nb3-dark.png"
+                   data-light="assets/nb3-light.png">
+                <span class="slot-label">notebook 3</span>
+              </div>
+              <div class="nb-foot"><span class="nb-ico">📄</span><span>Notebook 3</span></div>
+            </a>
+            <a class="notebook" href="#/notes">
+              <div class="img-slot ratio-43"
+                   data-slot="notebook-4"
+                   data-dark="assets/nb4-dark.png"
+                   data-light="assets/nb4-light.png">
+                <span class="slot-label">notebook 4</span>
+              </div>
+              <div class="nb-foot"><span class="nb-ico">📄</span><span>Notebook 4</span></div>
+            </a>
+            <a class="notebook" href="#/notes">
+              <div class="img-slot ratio-43"
+                   data-slot="notebook-5"
+                   data-dark="assets/nb5-dark.png"
+                   data-light="assets/nb5-light.png">
+                <span class="slot-label">notebook 5</span>
+              </div>
+              <div class="nb-foot"><span class="nb-ico">📄</span><span>Notebook 5</span></div>
+            </a>
+            <a class="notebook add" href="#">
+              <div class="img-slot ratio-43 dashed">
+                <span class="slot-label">+ new notebook</span>
+              </div>
+              <div class="nb-foot"><span class="nb-ico">＋</span><span>add</span></div>
+            </a>
+          </div>
+
+          <!-- QUICK BLOCKS -->
+          <h2>✦ quick blocks</h2>
+          <div class="grid-2">
+            <a class="card" href="#/about"><div class="card-emoji">🌙</div><h3>about me</h3><p>name, vibes, what i do at 3am.</p></a>
+            <a class="card" href="#/hobby/default"><div class="card-emoji">🌸</div><h3>hobbies</h3><p>currently obsessed with <em>one</em> default hobby.</p></a>
+            <a class="card" href="#/notes"><div class="card-emoji">🗒️</div><h3>notes</h3><p>scribbles, half-baked ideas, daily logs.</p></a>
+            <a class="card" href="#/links"><div class="card-emoji">🔗</div><h3>links</h3><p>where to find me elsewhere.</p></a>
+          </div>
+
+          <!-- TODAY -->
+          <h2>✦ today</h2>
+          <ul class="todo">
+            <li><label><input type="checkbox" checked> hydrate (real water, not coffee)</label></li>
+            <li><label><input type="checkbox"> push something tiny</label></li>
+            <li><label><input type="checkbox"> draw a little skull doodle</label></li>
+            <li><label><input type="checkbox"> sleep before 2am (lying)</label></li>
+          </ul>
+
+          <!-- NOW PLAYING -->
+          <h2>✦ now playing</h2>
+          <div class="now-playing">
+            <div class="np-cover">
+              <svg viewBox="0 0 64 64" width="56" height="56"><defs><linearGradient id="np" x1="0" x2="1"><stop offset="0" stop-color="#ff7ad9"/><stop offset="1" stop-color="#a87bff"/></linearGradient></defs><rect width="64" height="64" rx="10" fill="url(#np)"/><circle cx="32" cy="32" r="10" fill="#0e0918"/><circle cx="32" cy="32" r="2" fill="#ff7ad9"/></svg>
+            </div>
+            <div class="np-meta">
+              <div class="np-title">your mood · whatever fits</div>
+              <div class="np-bar"><span></span></div>
+              <div class="np-time"><span>1:23</span><span>3:45</span></div>
+            </div>
+          </div>
+        </template>
+
+        <!-- ====== ABOUT ====== -->
+        <template id="tpl-/about">
+          <h1 class="page-title" contenteditable="true" spellcheck="false">about <span class="grad">me</span></h1>
+          <p class="page-sub">the about block. swap any of this — it's just html.</p>
+
+          <div class="about-row">
+            <div class="img-slot ratio-portrait small"
+                 data-slot="about"
+                 data-dark="assets/about-dark.png"
+                 data-light="assets/about-light.png">
+              <span class="slot-label">about · portrait</span>
+            </div>
+            <div class="props">
+              <div class="prop"><span class="prop-k">📛 name</span><span class="prop-v">Kovs</span></div>
+              <div class="prop"><span class="prop-k">🌐 from</span><span class="prop-v">the internet, mostly</span></div>
+              <div class="prop"><span class="prop-k">🧠 does</span><span class="prop-v">code · design · overthinks</span></div>
+              <div class="prop"><span class="prop-k">🎧 fuel</span><span class="prop-v">lofi, hyperpop, dnb</span></div>
+              <div class="prop"><span class="prop-k">🎀 mascot</span><span class="prop-v">kuromi (obvious)</span></div>
+            </div>
+          </div>
+
+          <h2>✦ tl;dr</h2>
+          <p>hi! i build things on the internet and decorate my workspace like a sticker book.
+            this site is part journal, part landing page, part shrine to <em>kuromi</em> and her general vibe.</p>
+
+          <div class="callout c-pink">
+            <span class="callout-emoji">💌</span>
+            <div><strong>say hi:</strong> drop a note in <a href="#/links">links</a> or just stare meaningfully into the void.</div>
+          </div>
+
+          <h2>✦ stack of the moment</h2>
+          <div class="chips">
+            <span class="chip soft">html</span><span class="chip soft">css</span><span class="chip soft">js</span>
+            <span class="chip soft">swift</span><span class="chip soft">swiftui</span><span class="chip soft">figma</span>
+          </div>
+        </template>
+
+        <!-- ====== HOBBY ====== -->
+        <template id="tpl-/hobby/default">
+          <h1 class="page-title" contenteditable="true" spellcheck="false">default <span class="grad">hobby</span></h1>
+          <p class="page-sub">a placeholder hobby page — duplicate this block for each new hobby.</p>
+
+          <div class="img-slot ratio-banner"
+               data-slot="hobby-banner"
+               data-dark="assets/hobby-dark.png"
+               data-light="assets/hobby-light.png">
+            <span class="slot-label">hobby banner · 16:6</span>
+          </div>
+
+          <div class="props">
+            <div class="prop"><span class="prop-k">🌷 name</span><span class="prop-v" contenteditable="true">untitled hobby</span></div>
+            <div class="prop"><span class="prop-k">📅 since</span><span class="prop-v" contenteditable="true">forever</span></div>
+            <div class="prop"><span class="prop-k">🔥 level</span><span class="prop-v"><span class="bar"><i style="--p:62%"></i></span> 62%</span></div>
+            <div class="prop"><span class="prop-k">🏷️ tags</span><span class="prop-v"><span class="tag">#wip</span> <span class="tag">#fun</span></span></div>
+          </div>
+
+          <h2>✦ what's the deal</h2>
+          <p>describe the hobby here. why you love it, the tools, the rituals, the silly little setup.</p>
+
+          <details class="toggle" open>
+            <summary>🎯 goals</summary>
+            <ul><li>do the thing weekly</li><li>document tiny wins</li><li>not turn it into homework</li></ul>
+          </details>
+          <details class="toggle">
+            <summary>📚 references</summary>
+            <ul><li><a href="#">a cool tutorial</a></li><li><a href="#">that one artist</a></li></ul>
+          </details>
+
+          <h2>✦ snippet</h2>
+<pre class="code"><code><span class="tk-c">// a default hobby. add yours.</span>
+<span class="tk-k">const</span> <span class="tk-v">hobby</span> = {
+  <span class="tk-s">name</span>: <span class="tk-str">"untitled"</span>,
+  <span class="tk-s">vibe</span>: <span class="tk-str">"kuromi-core"</span>,
+  <span class="tk-s">active</span>: <span class="tk-k">true</span>,
+};</code></pre>
+        </template>
+
+        <!-- ====== NOTES ====== -->
+        <template id="tpl-/notes">
+          <h1 class="page-title" contenteditable="true" spellcheck="false"><span class="grad">notes</span></h1>
+          <p class="page-sub">a stack of post-its. obsidian-style backlinks for free.</p>
+          <div class="notes">
+            <article class="note">
+              <header><span class="note-date">2026·05·22</span><span class="tag">#late-night</span></header>
+              <h3>idea: little widgets</h3>
+              <p>tiny <a class="wikilink" href="#/hobby/default">[[default hobby]]</a> widgets on the home page. clocks, weather, vibes.</p>
+            </article>
+            <article class="note">
+              <header><span class="note-date">2026·05·19</span><span class="tag">#dev</span></header>
+              <h3>theme tokens</h3>
+              <p>keep palette in CSS vars. one swap = entire site reskins. see <a class="wikilink" href="#/about">[[about me]]</a>.</p>
+            </article>
+            <article class="note">
+              <header><span class="note-date">2026·05·11</span><span class="tag">#cute</span></header>
+              <h3>kuromi mood</h3>
+              <p>pastel goth = soft pinks on dark violet. add stars, sparkles, a single skull.</p>
+            </article>
+            <article class="note new">
+              <header><span class="note-date">+ new</span></header>
+              <h3>add a note</h3>
+              <p>duplicate this block. they stack automatically.</p>
+            </article>
+          </div>
+        </template>
+
+        <!-- ====== LINKS ====== -->
+        <template id="tpl-/links">
+          <h1 class="page-title" contenteditable="true" spellcheck="false"><span class="grad">links</span></h1>
+          <p class="page-sub">where to find me · slot your handles in.</p>
+          <div class="links">
+            <a class="link-row" href="#"><span class="lico">🐙</span><div><div class="ln">github</div><div class="lh">@you</div></div><span class="lar">↗</span></a>
+            <a class="link-row" href="#"><span class="lico">🐦</span><div><div class="ln">twitter</div><div class="lh">@you</div></div><span class="lar">↗</span></a>
+            <a class="link-row" href="#"><span class="lico">🦋</span><div><div class="ln">bluesky</div><div class="lh">@you</div></div><span class="lar">↗</span></a>
+            <a class="link-row" href="#"><span class="lico">📷</span><div><div class="ln">instagram</div><div class="lh">@you</div></div><span class="lar">↗</span></a>
+            <a class="link-row" href="#"><span class="lico">✉️</span><div><div class="ln">email</div><div class="lh">hi@kovs.example</div></div><span class="lar">↗</span></a>
+            <a class="link-row" href="#"><span class="lico">🎵</span><div><div class="ln">spotify</div><div class="lh">currently looping</div></div><span class="lar">↗</span></a>
+          </div>
+        </template>
+      </article>
+
+      <footer class="page-footer"><span>last edited just now · auto-saved to the void</span></footer>
+    </main>
+
+    <!-- ░░░ OUTLINE ░░░ -->
+    <aside class="outline" id="outline">
+      <div class="ol-head">on this page</div>
+      <ul id="olList" class="ol-list"></ul>
+      <div class="ol-head">backlinks</div>
+      <ul class="ol-list">
+        <li><a href="#/notes">notes → idea: little widgets</a></li>
+        <li><a href="#/about">about me</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <!-- ░░░ COMMAND PALETTE ░░░ -->
+  <div class="cmdk" id="cmdk" hidden>
+    <div class="cmdk-backdrop"></div>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+      <input id="cmdkInput" type="text" placeholder="Jump to a page or type a command…" />
+      <ul id="cmdkList" class="cmdk-list"></ul>
+      <div class="cmdk-foot">
+        <span><kbd>↑↓</kbd> move</span><span><kbd>↵</kbd> open</span><span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
